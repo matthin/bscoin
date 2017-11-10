@@ -1,6 +1,8 @@
 extern crate bscoin;
 
+use bscoin::blockchain::Blockchain;
+
 fn main() {
-    let chain = bscoin::block::Blockchain::load().unwrap();
+    let chain = Blockchain::load().unwrap();
     chain.save().unwrap();
 }
