@@ -6,7 +6,7 @@ extern crate openssl;
 
 use byteorder::{LittleEndian, WriteBytesExt};
 use openssl::sha::sha256;
-use std::io;
+use error::BsError;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Block {
@@ -18,7 +18,7 @@ pub struct Block {
 }
 
 impl Block {
-    pub fn calculate_hash(&mut self) -> io::Result<()> {
+    pub fn calculate_hash(&mut self) -> Result<(), BsError> {
         let mut buffer = Vec::new();
         buffer.write_u64::<LittleEndian>(self.index)?;
         buffer.write_i64::<LittleEndian>(self.timestamp)?;

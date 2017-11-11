@@ -4,8 +4,7 @@ extern crate time;
 
 use block::Block;
 use std::io;
-use std::io::prelude::*;
-use std::io::Read;
+use std::io::{Read, Write};
 use std::fs::File;
 use error::BsError;
 
@@ -34,46 +33,16 @@ impl Blockchain {
         Blockchain { list: Vec::new() }
     }
 
-    pub fn next_block(&mut self, data: String) -> io::Result<Block> {
-        let prev = self.list.last().unwrap();
+    pub fn next_block(&mut self, data: String) -> Result<Block, BsError> {
+        let prev = self.list.last().ok_or(io::Error::new(
+            io::ErrorKind::Other,
+            "genesis block should exist",
+        ))?;
 
         let mut block = Block {
             index: prev.index + 1,
             previous_hash: prev.hash,
-            hash: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-            ],
+            hash: [0; 32],
             timestamp: time::now().to_timespec().sec,
             data: data,
         };
